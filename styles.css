@@ -1,0 +1,58 @@
+/* DeepWiki 按钮样式 */
+.deepwiki-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #24292f;
+  text-decoration: none;
+  background-color: #f6f8fa;
+  border: 1px solid rgba(27, 31, 36, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04);
+  transition: background-color 0.2s;
+}
+
+.deepwiki-link:hover {
+  background-color: #f3f4f6;
+  text-decoration: none;
+  color: #24292f;
+}
+
+.deepwiki-button {
+  display: flex;
+  align-items: center;
+}
+
+.deepwiki-icon {
+  margin-right: 5px;
+  transition: transform 0.3s ease-in-out;
+  width: 16px;
+  height: 16px;
+}
+
+.deepwiki-link:hover .deepwiki-icon {
+  transform: rotate(180deg);
+}
+
+/* DeepWiki 容器样式 */
+.deepwiki-container {
+  margin-right: 8px;
+  float: left;
+}
+
+/* 确保DeepWiki按钮适合GitHub接口的黑暗模式 */
+@media (prefers-color-scheme: dark) {
+  .deepwiki-link {
+    color: #c9d1d9;
+    background-color: #21262d;
+    border-color: rgba(240, 246, 252, 0.1);
+  }
+  
+  .deepwiki-link:hover {
+    background-color: #30363d;
+    color: #c9d1d9;
+  }
+} 

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "DeepWiki Quick Access",
+  "version": "1.0",
+  "description": "快速访问 GitHub 仓库对应的 DeepWiki 页面",
+  "permissions": [
+    "tabs", 
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://github.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*"],
+      "js": ["icons/deepwiki-icons.js", "content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/deepwiki-icon.svg"],
+      "matches": ["https://github.com/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+} 
