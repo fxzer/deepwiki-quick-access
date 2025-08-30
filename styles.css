@@ -1,58 +1,184 @@
-/* DeepWiki 按钮样式 */
-.deepwiki-link {
-  display: inline-flex;
+/* 容器样式 */
+.dqa-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+  float: left;
+}
+
+.dqa-btn-group {
+  display: flex;
   align-items: center;
-  padding: 5px 10px;
+  border: 1px solid rgba(27, 31, 36, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04);
+  height: 28px;
+  overflow: hidden; /* 确保子元素的背景不会溢出圆角 */
+}
+
+/* 主按钮 */
+.dqa-main-btn {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
   font-size: 12px;
   font-weight: 500;
   line-height: 20px;
   color: #24292f;
   text-decoration: none;
+  border-right: 1px solid rgba(27, 31, 36, 0.15);
+  height: 100%;
   background-color: #f6f8fa;
-  border: 1px solid rgba(27, 31, 36, 0.15);
-  border-radius: 6px;
-  box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04);
   transition: background-color 0.2s;
 }
 
-.deepwiki-link:hover {
-  background-color: #f3f4f6;
+.dqa-main-btn:hover {
   text-decoration: none;
   color: #24292f;
+  background-color: #f3f4f6;
 }
 
-.deepwiki-button {
+.dqa-main-btn svg {
+  margin-right: 5px;
+}
+
+/* 下拉触发器 */
+.dqa-dropdown-trigger {
   display: flex;
   align-items: center;
+  padding: 0 8px;
+  cursor: pointer;
+  line-height: 20px;
+  color: #59636e;
+  height: 100%;
+  background-color: #f6f8fa;
+  transition: background-color 0.2s;
 }
 
-.deepwiki-icon {
-  margin-right: 5px;
-  transition: transform 0.3s ease-in-out;
-  width: 16px;
-  height: 16px;
+.dqa-dropdown-trigger:hover {
+  background-color: #f3f4f6;
 }
 
-.deepwiki-link:hover .deepwiki-icon {
-  transform: rotate(180deg);
+.dqa-dropdown-trigger svg {
+  fill: currentColor;
 }
 
-/* DeepWiki 容器样式 */
-.deepwiki-container {
+/* 下拉菜单 */
+.dqa-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  width: 200px;
+  background-color: #fff;
+  border: 1px solid rgba(27, 31, 36, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+  z-index: 99;
+}
+
+.dqa-container.open .dqa-dropdown-menu {
+  display: block;
+}
+
+.dqa-dropdown-header {
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #eaecef;
+}
+
+.dqa-dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dqa-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #eaecef;
+  cursor: pointer;
+}
+
+.dqa-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dqa-dropdown-item:hover {
+  background-color: #f6f8fa;
+}
+
+.dqa-item-link {
+  display: flex;
+  align-items: center;
+  color: #24292f;
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+.dqa-item-link svg {
   margin-right: 8px;
-  float: left;
+  color: #57606a;
 }
 
-/* 确保DeepWiki按钮适合GitHub接口的黑暗模式 */
+.dqa-pin-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  color: #57606a;
+}
+
+.dqa-pin-btn.pinned svg {
+  color: #218bff;
+}
+
+/* 暗黑模式 */
 @media (prefers-color-scheme: dark) {
-  .deepwiki-link {
-    color: #c9d1d9;
-    background-color: #21262d;
+  .dqa-btn-group {
     border-color: rgba(240, 246, 252, 0.1);
   }
-  
-  .deepwiki-link:hover {
+
+  .dqa-main-btn,
+  .dqa-dropdown-trigger {
+    color: #c9d1d9;
+    background-color: #21262d;
+  }
+
+  .dqa-main-btn:hover,
+  .dqa-dropdown-trigger:hover {
     background-color: #30363d;
+  }
+
+  .dqa-main-btn {
+    border-right-color: rgba(240, 246, 252, 0.1);
+  }
+  .dqa-dropdown-menu {
+    background-color: #161b22;
+    border-color: #30363d;
+  }
+  .dqa-dropdown-header {
+    border-bottom-color: #30363d;
+  }
+  .dqa-dropdown-item {
+    border-bottom-color: #30363d;
+  }
+  .dqa-dropdown-item:hover {
+    background-color: #21262d;
+  }
+  .dqa-item-link {
     color: #c9d1d9;
   }
-} 
+  .dqa-item-link svg,
+  .dqa-pin-btn {
+    color: #8b949e;
+  }
+  .dqa-pin-btn.pinned svg {
+    color: #58a6ff;
+  }
+}

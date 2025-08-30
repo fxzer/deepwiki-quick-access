@@ -1,50 +1,54 @@
-<div align="center">
-  <img src="icons/128.png" alt="DeepWiki Quick Access 图标" width="128" height="128">
-  <h1>DeepWiki Quick Access</h1>
+# GitHub 源码解读快捷访问扩展，快捷访问 GitHub 仓库对应的 DeepWiki、ZreadAI、ReadmeX 页面
 
-<p align="center">
-  <a href="#english">English</a> | <a href="#chinese">中文</a>
-</p>
+这是一个浏览器扩展，旨在增强您的 GitHub 浏览体验。它在 GitHub 的仓库页面添加了一个可定制的快捷访问按钮，让您可以一键跳转到与该仓库相关的多个第三方代码阅读和分析网站。
 
-</div>
+![插件截图](example.png)
 
-<h2 id="chinese">简介</h2>
+## ✨ 功能特性
 
-DeepWiki Quick Access 是一个 一键访问该仓库对应的 DeepWiki 页面  Chrome 扩展程序。扩展程序无缝集成到 GitHub 界面中，提供简洁直观的用户体验。
+- **多站点支持**: 快速跳转到以下网站对应的仓库页面：
+  - DeepWiki
+  - Zread.ai
+  - ReadmeX
+- **可定制的默认选项**:
+  - 通过点击下拉菜单中的“图钉”图标，可以将任何一个网站设置为您的默认快捷方式。
+  - 主按钮会显示您固定的网站，方便您最常用的操作。
+- **持久化记忆**:
+  - 扩展程序会通过 `chrome.storage` 自动保存您的偏好设置，无需重复配置。
+- **无缝的 UI 集成**:
+  - 按钮和下拉菜单的设计与 GitHub 的原生界面风格保持一致，支持亮色和暗色模式。
+- **动态加载**:
+  - 仅在 GitHub 仓库页面加载，对浏览器性能影响极小。
 
-## 功能特点
+## 🚀 如何使用
 
-- 在 GitHub 仓库页面添加 DeepWiki 快速访问按钮
-- 与 GitHub 界面无缝集成
-- 响应式设计，适应不同屏幕尺寸
-- 支持 GitHub 单页应用导航（SPA）
-- 轻量级设计，不影响页面加载速度
+1.  **安装扩展**:
 
-## 使用截图
+    - 从 [发布页面](...) 下载最新版本的 `crx` 或 `zip` 文件。
+    - 打开浏览器的扩展管理页面 (`chrome://extensions/`)。
+    - 开启“开发者模式”。
+    - 将下载的文件拖拽到页面中进行安装。
 
-![DeepWiki Quick Access 截图](icons/sc.png)
+2.  **使用**:
+    - 访问任何一个 GitHub 仓库页面（例如 `https://github.com/vuejs/core`）。
+    - 在页面右上方的操作按钮区域（Star, Fork 按钮旁边），您会看到一个新的按钮，默认显示 **DeepWiki**。
+    - **直接跳转**: 点击主按钮，会直接在新标签页打开当前仓库在 DeepWiki 上的对应页面。
+    - **切换站点**: 点击主按钮右侧的下拉箭头，会弹出一个列表，显示所有支持的网站。
+    - **固定偏好**: 在下拉列表中，点击您喜欢的网站右侧的 **图钉** 图标。该网站将成为新的默认选项，并显示在主按钮上。
 
-## 安装
+## 🛠️ 开发与贡献
 
-1. 在 Chrome 网上应用店搜索 "DeepWiki Quick Access" 或直接访问[插件页面](https://chrome.google.com/webstore/detail/your-extension-id)
-2. 点击 "添加至 Chrome" 按钮
-3. 在弹出的确认窗口中点击 "添加扩展程序"
+如果您有兴趣为此项目做出贡献，欢迎：
 
-## 使用方法
+- 提交 [Issues](...) 报告错误或提出功能建议。
+- 创建 [Pull Request](...) 提交您的代码改进。
 
-1. 打开任意 GitHub 仓库页面
-2. 在仓库导航栏中找到新增的 DeepWiki 按钮
-3. 点击该按钮即可跳转到对应的 DeepWiki 页面
+在本地环境中设置：
 
-## 隐私声明
+1.  克隆本仓库。
+2.  在浏览器扩展管理页面，点击“加载已解压的扩展程序”。
+3.  选择克隆到本地的仓库文件夹。
 
-本扩展程序不收集任何个人信息或使用数据。它仅在 GitHub 网站上运行，并且只添加界面按钮和功能。所有操作均在本地执行，不会上传数据到任何服务器。
+## 📄 许可
 
-## 反馈与支持
-
-如果您有任何问题、建议或反馈，请[提交 issue](https://chrome.google.com/webstore/detail/your-extension-id) 或发送邮件至 [your-email@example.com]。
-
-## 许可证
-
-本项目采用 [MIT 许可证](LICENSE)。
-
+本项目基于 [MIT License](LICENSE) 开源。

@@ -1,49 +1,62 @@
 <div align="center">
-  <img src="icons/128.png" alt="DeepWiki Quick Access Icon" width="128" height="128">
-  <h1>DeepWiki Quick Access</h1>
+  <img src="icons/128.png" alt="Quick Access Extension Icon" width="128" height="128">
+  <h1>GitHub Quick Access Extension</h1>
 
 <p align="center">
-  English | <a href="./README.md">中文</a>
+  <a href="./README.md">中文</a> | English
 </p>
 
 </div>
 
-## Introduction
+This is a browser extension designed to enhance your GitHub browsing experience. It adds a customizable quick access button to GitHub repository pages, allowing you to jump to multiple third-party code reading and analysis websites related to the repository with a single click.
 
-DeepWiki Quick Access is a Chrome extension that adds a convenient button to GitHub repository pages, allowing you to access the corresponding DeepWiki page with a single click. The extension seamlessly integrates into the GitHub interface, providing a clean and intuitive user experience.
+![Extension Screenshot](example.png)
 
-## Features
+## ✨ Features
 
-- Adds DeepWiki quick access button to GitHub repository pages
-- Seamlessly integrates with GitHub interface
-- Responsive design that adapts to different screen sizes
-- Supports GitHub single-page application navigation (SPA)
-- Lightweight design that doesn't impact page loading speed
+- **Multi-site Support**: Quickly jump to the corresponding repository pages on the following sites:
+  - DeepWiki
+  - Zread.ai
+  - ReadmeX
+- **Customizable Default**:
+  - Set any site as your default shortcut by clicking the "pin" icon in the dropdown menu.
+  - The main button displays your pinned site for your most frequent actions.
+- **Persistent Memory**:
+  - The extension automatically saves your preferences using `chrome.storage`, so there's no need to reconfigure.
+- **Seamless UI Integration**:
+  - The button and dropdown menu are designed to match GitHub's native interface style, supporting both light and dark modes.
+- **Dynamic Loading**:
+  - Loads only on GitHub repository pages, with minimal impact on browser performance.
 
-## Screenshot
+## 🚀 How to Use
 
-![DeepWiki Quick Access Screenshot](icons/sc.png)
+1.  **Installation**:
 
-## Installation
+    - Download the latest version (`crx` or `zip`) from the [Releases page](...).
+    - Open your browser's extension management page (e.g., `chrome://extensions/`).
+    - Enable "Developer mode".
+    - Drag and drop the downloaded file onto the page to install.
 
-1. Search for "DeepWiki Quick Access" in the Chrome Web Store or directly visit the [extension page](https://chrome.google.com/webstore/detail/your-extension-id)
-2. Click the "Add to Chrome" button
-3. Click "Add Extension" in the confirmation dialog
+2.  **Usage**:
+    - Visit any GitHub repository page (e.g., `https://github.com/vuejs/core`).
+    - In the action button area at the top right (next to the Star and Fork buttons), you will see a new button, defaulting to **DeepWiki**.
+    - **Direct Jump**: Click the main button to open the corresponding page for the current repository on DeepWiki in a new tab.
+    - **Switch Site**: Click the dropdown arrow to the right of the main button to reveal a list of all supported sites.
+    - **Pin Preference**: In the dropdown list, click the **pin** icon next to your preferred site. It will become the new default and will be displayed on the main button.
 
-## How to Use
+## 🛠️ Development & Contribution
 
-1. Open any GitHub repository page
-2. Find the newly added DeepWiki button in the repository navigation bar
-3. Click the button to navigate to the corresponding DeepWiki page
+If you're interested in contributing to this project, you are welcome to:
 
-## Privacy Statement
+- Submit [Issues](...) to report bugs or suggest features.
+- Create [Pull Requests](...) to submit your code improvements.
 
-This extension does not collect any personal information or usage data. It only runs on GitHub websites and only adds interface buttons and functionality. All operations are performed locally and no data is uploaded to any server.
+To set up the local environment:
 
-## Feedback and Support
+1.  Clone this repository.
+2.  In your browser's extension management page, click "Load unpacked".
+3.  Select the locally cloned repository folder.
 
-If you have any questions, suggestions, or feedback, please [submit an issue](https://github.com/your-username/deepwiki-quick-access/issues) or send an email to [your-email@example.com].
+## 📄 License
 
-## License
-
-This project is licensed under the [MIT License](LICENSE). 
+This project is licensed under the [MIT License](LICENSE).

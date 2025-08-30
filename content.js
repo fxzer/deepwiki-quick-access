@@ -1,121 +1,220 @@
-// 在 GitHub 页面上添加 DeepWiki 图标
-(function() {
-  // 存储当前路径，用于检测变化
+// ==UserScript==
+// @name         Github Repo AI Wikis
+// @namespace    http://tampermonkey.net/
+// @version      2.0
+// @description  Adds a quick access dropdown on GitHub repo pages to navigate to DeepWiki, ZreadAI, and ReadmeX.
+// @author       You
+// @match        https://github.com/*/*
+// @grant        chrome.storage.local
+// ==/UserScript==
+
+(function () {
+  'use strict';
+
+  // --- 配置 ---
+  const SERVICES = {
+    DeepWiki: {
+      name: 'DeepWiki',
+      urlTemplate: 'https://deepwiki.com/{owner}/{repo}',
+      icon: ICONS.DEEPWIKI,
+    },
+    ZreadAI: {
+      name: 'ZreadAI',
+      urlTemplate: 'https://zread.ai/{owner}/{repo}',
+      icon: ICONS.ZREAD,
+    },
+    ReadmeX: {
+      name: 'ReadmeX',
+      urlTemplate: 'https://readmex.com/{owner}/{repo}',
+      icon: ICONS.READMEX,
+    },
+  };
+  const DEFAULT_SERVICE = 'DeepWiki';
+
+  // --- 状态 ---
   let currentPath = window.location.pathname;
-  
-  // 提取仓库所有者和名称并添加按钮的主函数
-  async function processPage() {
-    // 清除之前添加的按钮
-    const existingButtons = document.querySelectorAll('.deepwiki-container');
-    existingButtons.forEach(button => button.remove());
-    
-    // 检查是否在正确的 GitHub 页面
+  let owner, repo;
+  let pinnedService = DEFAULT_SERVICE;
+
+  // --- 主函数 ---
+  async function init() {
+    await loadPinnedService();
+    observeDOM();
+  }
+
+  // --- DOM 操作 ---
+  function observeDOM() {
+    const observer = new MutationObserver(() => {
+      if (window.location.pathname !== currentPath) {
+        currentPath = window.location.pathname;
+        onUrlChange();
+      }
+      injectComponent();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    onUrlChange(); // 首次加载时运行
+  }
+
+  function onUrlChange() {
     const pathParts = window.location.pathname.split('/').filter(part => part);
-    if (pathParts.length < 2) return; // 不是有效的仓库页面
-    
-    const owner = pathParts[0];
-    const repo = pathParts[1];
-    
-    // 如果已经找到pagehead-actions，直接添加按钮
-    const repoNav = document.querySelector('ul.pagehead-actions');
-    if (repoNav) {
-      await addDeepWikiButton(owner, repo);
-      return;
+    if (pathParts.length >= 2) {
+      owner = pathParts[0];
+      repo = pathParts[1];
+      injectComponent();
+    } else {
+      removeComponent();
     }
-    
-    // 否则，监听DOM变化，等待pagehead-actions出现
-    const observer = new MutationObserver(function(mutations) {
-      const repoNav = document.querySelector('ul.pagehead-actions');
-      if (repoNav && !document.querySelector('.deepwiki-container')) {
-        addDeepWikiButton(owner, repo).catch(err => console.error('添加DeepWiki按钮失败:', err));
-        observer.disconnect(); // 找到并添加后停止观察
-      }
-    });
-    
-    // 开始观察文档变化
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
   }
-  
-  // 添加 DeepWiki 图标
-  async function addDeepWikiButton(owner, repo) {
-    // 检查是否已经添加过按钮
-    if (document.querySelector('.deepwiki-container')) {
-      return; // 已经存在按钮，不再添加
-    }
-    
-    // 创建 DeepWiki 按钮元素
-    const deepwikiContainer = document.createElement('div');
-    deepwikiContainer.className = 'deepwiki-container';
-    deepwikiContainer.style.marginRight = '8px';
-    deepwikiContainer.style.float = 'left';
-    
-    try {
-      // 尝试使用异步方法获取按钮HTML
-      const buttonHTML = await DEEPWIKI_ICONS.getButtonHTMLAsync(owner, repo);
-      deepwikiContainer.innerHTML = buttonHTML;
-    } catch (error) {
-      // 如果异步获取失败，使用同步方法（带有备用图标）
-      console.error('异步获取按钮HTML失败，使用备用图标:', error);
-      deepwikiContainer.innerHTML = DEEPWIKI_ICONS.getButtonHTML(owner, repo);
-    }
-    
-    // 获取目标容器
+
+  function injectComponent() {
     const targetContainer = document.querySelector('ul.pagehead-actions');
-    if (targetContainer) {
-      // 检查页面中是否已经有含有DeepWiki文本的元素
-      const existingDeepwikiButton = Array.from(targetContainer.querySelectorAll('*'))
-        .find(el => el.textContent && el.textContent.includes('DeepWiki'));
-      
-      if (existingDeepwikiButton) {
-        // 如果已经存在DeepWiki按钮，则不再添加
-        return;
-      }
-      
-      // 查找是否存在特殊class的子元素
-      const specialElements = targetContainer.querySelectorAll('div[data-testid], div[class*="collection-assistant"]');
-      
-      if (specialElements.length > 0) {
-        // 我们只把按钮放在第一个特殊元素后面
-        targetContainer.insertBefore(deepwikiContainer, specialElements[0].nextSibling);
-      } else {
-        // 如果没有特殊元素，放在最前面
-        targetContainer.insertBefore(deepwikiContainer, targetContainer.firstChild);
-      }
+    if (!targetContainer || document.querySelector('.dqa-container')) {
+      return; // 目标不存在或已注入
+    }
+
+    const component = createComponent();
+    targetContainer.insertBefore(component, targetContainer.firstChild);
+  }
+
+  function removeComponent() {
+    const existingComponent = document.querySelector('.dqa-container');
+    if (existingComponent) {
+      existingComponent.remove();
     }
   }
-  
-  // 立即处理当前页面
-  processPage().catch(err => console.error('处理页面失败:', err));
-  
-  // 设置URL变化检测（处理GitHub的单页应用导航）
-  function checkURLChange() {
-    if (currentPath !== window.location.pathname) {
-      currentPath = window.location.pathname;
-      processPage().catch(err => console.error('URL变化后处理页面失败:', err));
+
+  function createComponent() {
+    const container = document.createElement('div');
+    container.className = 'dqa-container';
+
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'dqa-btn-group';
+
+    // 主按钮
+    const mainBtn = document.createElement('a');
+    mainBtn.className = 'dqa-main-btn';
+    updateMainButton(mainBtn);
+
+    // 下拉触发器
+    const dropdownTrigger = document.createElement('div');
+    dropdownTrigger.className = 'dqa-dropdown-trigger';
+    dropdownTrigger.innerHTML = `<svg aria-hidden="true" focusable="false" class="octicon octicon-triangle-down" viewBox="0 0 16 16" width="16" height="16" fill="currentPath" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path></svg>`;
+    dropdownTrigger.onclick = e => {
+      e.stopPropagation();
+      container.classList.toggle('open');
+    };
+
+    // 下拉菜单
+    const dropdownMenu = createDropdownMenu();
+
+    btnGroup.append(mainBtn, dropdownTrigger);
+    container.append(btnGroup, dropdownMenu);
+
+    // 点击外部关闭
+    document.addEventListener(
+      'click',
+      () => container.classList.remove('open'),
+      { once: true }
+    );
+
+    return container;
+  }
+
+  function createDropdownMenu() {
+    const menu = document.createElement('div');
+    menu.className = 'dqa-dropdown-menu';
+
+    const header = document.createElement('div');
+    header.className = 'dqa-dropdown-header';
+    header.textContent = '源码解读';
+    menu.appendChild(header);
+
+    const list = document.createElement('ul');
+    list.className = 'dqa-dropdown-list';
+
+    for (const serviceKey in SERVICES) {
+      const service = SERVICES[serviceKey];
+      const item = document.createElement('li');
+      item.className = 'dqa-dropdown-item';
+
+      const link = document.createElement('a');
+      link.className = 'dqa-item-link';
+      link.href = service.urlTemplate
+        .replace('{owner}', owner)
+        .replace('{repo}', repo);
+      link.target = '_blank';
+      link.innerHTML = `${service.icon} <span>${service.name}</span>`;
+
+      const pinBtn = document.createElement('button');
+      pinBtn.className = 'dqa-pin-btn';
+      pinBtn.innerHTML =
+        pinnedService === service.name ? ICONS.PIN_FILLED : ICONS.PIN;
+      if (pinnedService === service.name) {
+        pinBtn.classList.add('pinned');
+      }
+      pinBtn.onclick = e => {
+        e.stopPropagation();
+        setPinnedService(service.name);
+      };
+
+      item.append(link, pinBtn);
+      list.appendChild(item);
+    }
+
+    menu.appendChild(list);
+    return menu;
+  }
+
+  // --- 状态更新 & 重新渲染 ---
+  function updateUI() {
+    const container = document.querySelector('.dqa-container');
+    if (!container) return;
+
+    const mainBtn = container.querySelector('.dqa-main-btn');
+    if (mainBtn) {
+      updateMainButton(mainBtn);
+    }
+
+    const oldMenu = container.querySelector('.dqa-dropdown-menu');
+    if (oldMenu) {
+      const newMenu = createDropdownMenu();
+      oldMenu.replaceWith(newMenu);
     }
   }
-  
-  // 使用setInterval定期检查URL变化
-  setInterval(checkURLChange, 1000);
-  
-  // 使用History API监听路由变化
-  const originalPushState = history.pushState;
-  history.pushState = function() {
-    originalPushState.apply(this, arguments);
-    processPage().catch(err => console.error('pushState后处理页面失败:', err));
-  };
-  
-  const originalReplaceState = history.replaceState;
-  history.replaceState = function() {
-    originalReplaceState.apply(this, arguments);
-    processPage().catch(err => console.error('replaceState后处理页面失败:', err));
-  };
-  
-  // 监听popstate事件（后退/前进按钮）
-  window.addEventListener('popstate', function() {
-    processPage().catch(err => console.error('popstate后处理页面失败:', err));
-  });
+
+  function updateMainButton(buttonElement) {
+    const service = SERVICES[pinnedService];
+    if (!service) return;
+    buttonElement.href = service.urlTemplate
+      .replace('{owner}', owner)
+      .replace('{repo}', repo);
+    buttonElement.target = '_blank';
+    buttonElement.title = `在 ${service.name} 中查看此项目`;
+    buttonElement.innerHTML = `${service.icon} <span>${service.name}</span>`;
+  }
+
+  // --- 数据持久化 ---
+  async function loadPinnedService() {
+    try {
+      const data = await chrome.storage.local.get('pinnedService');
+      pinnedService = data.pinnedService || DEFAULT_SERVICE;
+    } catch (e) {
+      console.error('Failed to load pinned service:', e);
+      pinnedService = DEFAULT_SERVICE;
+    }
+  }
+
+  async function setPinnedService(serviceName) {
+    try {
+      await chrome.storage.local.set({ pinnedService: serviceName });
+      pinnedService = serviceName;
+      updateUI();
+      document.querySelector('.dqa-container')?.classList.remove('open');
+    } catch (e) {
+      console.error('Failed to save pinned service:', e);
+    }
+  }
+
+  // --- 启动 ---
+  init();
 })();

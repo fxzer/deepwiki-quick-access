@@ -1,26 +1,38 @@
 {
   "manifest_version": 3,
-  "name": "DeepWiki Quick Access",
+  "name": "Github Repo AI Wikis",
   "version": "1.0",
-  "description": "快速访问 GitHub 仓库对应的 DeepWiki 页面",
+  "description": " GitHub 源码解读快捷访问扩展，快捷访问 GitHub 仓库对应的 DeepWiki、ZreadAI、ReadmeX 页面",
   "permissions": [
-    "tabs", 
-    "activeTab"
+    "tabs",
+    "activeTab",
+    "storage"
   ],
   "host_permissions": [
     "https://github.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://github.com/*/*"],
-      "js": ["icons/deepwiki-icons.js", "content.js"],
-      "css": ["styles.css"]
+      "matches": [
+        "https://github.com/*/*"
+      ],
+      "js": [
+        "icons/deepwiki-icons.js",
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icons/deepwiki-icon.svg"],
-      "matches": ["https://github.com/*"]
+      "resources": [
+        "icons/deepwiki-icon.svg"
+      ],
+      "matches": [
+        "https://github.com/*"
+      ]
     }
   ],
   "icons": {
@@ -28,4 +40,4 @@
     "48": "icons/48.png",
     "128": "icons/128.png"
   }
-} 
+}
