@@ -84,7 +84,7 @@
   }
 
   function createComponent() {
-    const container = document.createElement('div');
+    const container = document.createElement('li');
     container.className = 'dqa-container';
 
     const btnGroup = document.createElement('div');
